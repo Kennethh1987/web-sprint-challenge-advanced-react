@@ -5,11 +5,22 @@ import PlantList from "./components/PlantList";
 import ShoppingCart from "./components/ShoppingCart";
 import CheckoutForm from "./components/CheckoutForm";
 
+import Toggle from "./components/LightMode/Toggler"
+import {ThemeProvider} from "styled-components";
+import { GlobalStyles } from "./components/LightMode/globalStyles";
+import { lightTheme, darkTheme } from "./components/LightMode/Themes"
+import  {useLightMode} from "./components/LightMode/useLightMode"
+
 import "./App.css";
 
 function App() {
   // array of plants that have been added to the cart
   const [cart, setCart] = useState([]);
+
+  const [theme, themeToggler] = useLightMode();
+
+  const themeMode = theme === 'light' ? lightTheme : darkTheme;
+
 
   // add a plant to the cart
   const addToCart = (plant) => {
@@ -22,7 +33,11 @@ function App() {
   };
 
   return (
+    <ThemeProvider theme={themeMode}>
+    <>
+    <GlobalStyles/>
     <div>
+    <Toggle theme={theme} toggleTheme={themeToggler} />
       <Router>
         <nav className="container">
           <h1>
@@ -61,7 +76,10 @@ function App() {
         />
         <Route path="/checkout" component={CheckoutForm} />
       </Router>
+      
     </div>
+    </>
+    </ThemeProvider>
   );
 }
 
